@@ -1,0 +1,1046 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DOOM VAULT | Kingdom of Latveria</title>
+
+<style>
+
+/* ===== GENERAL DESIGN ===== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Georgia, serif;
+    background: radial-gradient(circle at top, #193d2b, #07120c 70%);
+    color: #e5e5dc;
+}
+
+/* ===== LOADING SCREEN ===== */
+
+#loader {
+    position: fixed;
+    inset: 0;
+    background: #06120b;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#loader h1 {
+    color: #c5a34a;
+    letter-spacing: 5px;
+    font-size: 32px;
+    animation: glow 1.5s infinite alternate;
+}
+
+.loading-bar {
+    width: 180px;
+    height: 5px;
+    background: #293a2e;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.loading-fill {
+    width: 0;
+    height: 100%;
+    background: #c5a34a;
+    animation: loading 1.5s forwards;
+}
+
+@keyframes loading {
+    to { width: 100%; }
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 5px #c5a34a; }
+    to { text-shadow: 0 0 25px #c5a34a; }
+}
+
+/* ===== HEADER ===== */
+
+header {
+    background: #08170f;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #b99a48;
+    box-shadow: 0 5px 20px #0008;
+}
+
+.logo {
+    color: #d4b65e;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.profile {
+    color: #d4b65e;
+    font-size: 14px;
+}
+
+/* ===== HERO SECTION ===== */
+
+.hero {
+    text-align: center;
+    padding: 65px 15px 35px;
+}
+
+.hero .crown {
+    font-size: 45px;
+}
+
+.hero h1 {
+    font-size: clamp(30px, 6vw, 52px);
+    letter-spacing: 3px;
+    margin: 15px 0;
+}
+
+.hero h1 span {
+    color: #c5a34a;
+}
+
+.hero p {
+    color: #b6c4b7;
+    font-size: 15px;
+}
+
+/* ===== BUTTONS ===== */
+
+button {
+    background: linear-gradient(135deg, #315e3e, #142d20);
+    border: 1px solid #c5a34a;
+    color: #f5e6b2;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    transition: 0.3s;
+    margin: 5px;
+}
+
+button:hover {
+    background: #c5a34a;
+    color: #07130e;
+    box-shadow: 0 0 18px #c5a34a77;
+    transform: translateY(-2px);
+}
+
+/* ===== PLAYER STATISTICS ===== */
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.stat {
+    background: linear-gradient(145deg, #193c29, #09170f);
+    border: 1px solid #a58a43;
+    border-radius: 12px;
+    padding: 18px 30px;
+    min-width: 135px;
+    text-align: center;
+    box-shadow: 0 5px 20px #0008;
+}
+
+.stat h2 {
+    color: #d4b65e;
+    font-size: 27px;
+    margin: 5px;
+}
+
+.stat p {
+    color: #b7c4b8;
+    font-size: 11px;
+}
+
+/* ===== GAME SECTION ===== */
+
+.section-title {
+    text-align: center;
+    color: #d4b65e;
+    letter-spacing: 3px;
+    margin: 55px 0 15px;
+}
+
+.games {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+    max-width: 1100px;
+    margin: auto;
+    padding: 25px;
+}
+
+.card {
+    background: linear-gradient(145deg, #183b29, #09170f);
+    border: 1px solid #927b3d;
+    border-radius: 15px;
+    padding: 25px;
+    transition: 0.3s;
+    box-shadow: 0 8px 20px #0008;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    border-color: #e0bd5b;
+    box-shadow: 0 0 25px #c5a34a55;
+}
+
+.card .emoji {
+    font-size: 45px;
+}
+
+.card h2 {
+    color: #e0c46e;
+}
+
+.card p {
+    color: #b7c4b8;
+    font-size: 14px;
+    min-height: 38px;
+}
+
+/* ===== GAME AREA ===== */
+
+.game-area {
+    display: none;
+    max-width: 570px;
+    margin: 40px auto;
+    padding: 30px;
+    background: linear-gradient(145deg, #183b29, #07150d);
+    border: 2px solid #c5a34a;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 0 30px #000;
+}
+
+.game-area h2 {
+    color: #e0bd5b;
+}
+
+.game-area p {
+    color: #c1cbbb;
+}
+
+.game-area input {
+    padding: 12px;
+    width: 130px;
+    border-radius: 7px;
+    border: 1px solid #c5a34a;
+    background: #0d2015;
+    color: white;
+    font-size: 16px;
+}
+
+/* ===== MEMORY GAME ===== */
+
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.memory-card {
+    height: 65px;
+    font-size: 25px;
+    padding: 5px;
+    margin: 0;
+}
+
+.memory-card.matched {
+    background: #28743e;
+    color: white;
+}
+
+/* ===== REFLEX GAME ===== */
+
+#reactionBox {
+    background: #293d30;
+    border: 1px solid #c5a34a;
+    border-radius: 12px;
+    padding: 40px 10px;
+    margin: 20px 0;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+#reactionBox.ready {
+    background: #247a39;
+}
+
+#reactionBox.waiting {
+    background: #88651c;
+}
+
+/* ===== RESULT ===== */
+
+.result {
+    color: #e0bd5b;
+    font-weight: bold;
+    min-height: 25px;
+}
+
+/* ===== FOOTER ===== */
+
+footer {
+    text-align: center;
+    padding: 35px;
+    color: #b99a48;
+    border-top: 1px solid #927b3d;
+    margin-top: 50px;
+    font-size: 13px;
+}
+
+/* ===== MOBILE DESIGN ===== */
+
+@media(max-width: 550px) {
+
+    header {
+        padding: 18px;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+
+    .game-area {
+        margin: 20px 12px;
+        padding: 20px;
+    }
+
+    .hero {
+        padding-top: 40px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOADING SCREEN -->
+
+<div id="loader">
+
+    <h1>⚔ DOOM VAULT</h1>
+
+    <p>ENTERING THE KINGDOM OF LATVERIA...</p>
+
+    <div class="loading-bar">
+        <div class="loading-fill"></div>
+    </div>
+
+</div>
+
+<!-- HEADER -->
+
+<header>
+
+    <div class="logo">⚔ DOOM VAULT</div>
+
+    <div class="profile" id="playerName">
+        👤 PLAYER
+    </div>
+
+</header>
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="crown">👑</div>
+
+    <h1>ALL HAIL <span>DOOM</span></h1>
+
+    <p>The Kingdom of Latveria awaits. Enter the arcade.</p>
+
+    <button onclick="changeName()">
+        CHANGE PLAYER NAME
+    </button>
+
+</section>
+
+<!-- STATISTICS -->
+
+<section class="stats">
+
+    <div class="stat">
+        <h2 id="played">0</h2>
+        <p>GAMES PLAYED</p>
+    </div>
+
+    <div class="stat">
+        <h2 id="wins">0</h2>
+        <p>VICTORIES</p>
+    </div>
+
+    <div class="stat">
+        <h2 id="best">0</h2>
+        <p>BEST SCORE</p>
+    </div>
+
+</section>
+
+<!-- GAMES -->
+
+<h2 class="section-title">⚔ CHOOSE YOUR CHALLENGE ⚔</h2>
+
+<section class="games">
+
+    <div class="card">
+
+        <div class="emoji">🔢</div>
+
+        <h2>NUMBER HUNT</h2>
+
+        <p>Discover the secret number between 1 and 20.</p>
+
+        <button onclick="openGame('guess')">
+            ENTER CHALLENGE →
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <div class="emoji">✊</div>
+
+        <h2>RPS BATTLE</h2>
+
+        <p>Challenge the royal computer in a battle of choices.</p>
+
+        <button onclick="openGame('rps')">
+            ENTER CHALLENGE →
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <div class="emoji">⚡</div>
+
+        <h2>REFLEX RUSH</h2>
+
+        <p>Test your reaction speed and prove your abilities.</p>
+
+        <button onclick="openGame('reflex')">
+            ENTER CHALLENGE →
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <div class="emoji">🧠</div>
+
+        <h2>MEMORY MATCH</h2>
+
+        <p>Find the matching symbols and challenge your memory.</p>
+
+        <button onclick="openGame('memory')">
+            ENTER CHALLENGE →
+        </button>
+
+    </div>
+
+</section>
+
+<!-- GAME WINDOW -->
+
+<div class="game-area" id="gameArea">
+
+    <h2 id="gameTitle"></h2>
+
+    <div id="gameContent"></div>
+
+    <br>
+
+    <button onclick="closeGame()">
+        ← RETURN TO KINGDOM
+    </button>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer>
+
+    <h3>DOOM VAULT</h3>
+
+    THE KINGDOM OF LATVERIA
+
+    <p>© 2026 | BUILT WITH HTML, CSS & JAVASCRIPT</p>
+
+    ALL HAIL DOOM.
+
+</footer>
+
+<script>
+
+/* ===== PLAYER DATA ===== */
+
+let data;
+
+try {
+
+    data = JSON.parse(localStorage.getItem("doomData")) || {};
+
+} catch (error) {
+
+    data = {};
+
+}
+
+data = {
+    name: typeof data.name === "string" ? data.name : "PLAYER",
+    played: Number(data.played) || 0,
+    wins: Number(data.wins) || 0,
+    best: Number(data.best) || 0
+};
+
+function saveData() {
+
+    localStorage.setItem("doomData", JSON.stringify(data));
+
+    updateStats();
+
+}
+
+function updateStats() {
+
+    document.getElementById("playerName").innerText =
+        "👤 " + data.name;
+
+    document.getElementById("played").innerText =
+        data.played;
+
+    document.getElementById("wins").innerText =
+        data.wins;
+
+    document.getElementById("best").innerText =
+        data.best;
+
+}
+
+function changeName() {
+
+    let name = prompt("Enter your player name:", data.name);
+
+    if (name && name.trim()) {
+
+        data.name = name.trim().slice(0, 18);
+
+        saveData();
+
+    }
+
+}
+
+/* ===== GAME VARIABLES ===== */
+
+let gameFinished = false;
+
+let secretNumber;
+let attempts = 0;
+
+let waiting = false;
+let ready = false;
+let reactionStart;
+let reactionTimer;
+
+let firstCard = null;
+let lockBoard = false;
+let matches = 0;
+let memoryMoves = 0;
+
+/* ===== OPEN GAMES ===== */
+
+function openGame(game) {
+
+    gameFinished = false;
+
+    let area = document.getElementById("gameArea");
+
+    let title = document.getElementById("gameTitle");
+
+    let content = document.getElementById("gameContent");
+
+    area.style.display = "block";
+
+    area.scrollIntoView({behavior: "smooth"});
+
+    if (game === "guess") {
+
+        secretNumber = Math.floor(Math.random() * 20) + 1;
+
+        attempts = 0;
+
+        title.innerText = "🔢 NUMBER HUNT";
+
+        content.innerHTML = `
+
+            <p>Find the secret number between 1 and 20.</p>
+
+            <input type="number"
+            id="guessInput"
+            min="1"
+            max="20"
+            placeholder="Number">
+
+            <button onclick="checkGuess()">GUESS</button>
+
+            <p class="result" id="guessResult">
+                YOUR CHALLENGE BEGINS!
+            </p>
+
+            <p id="attemptCount">Attempts: 0</p>
+
+            <button onclick="openGame('guess')">
+                RESTART
+            </button>
+
+        `;
+
+    }
+
+    else if (game === "rps") {
+
+        title.innerText = "✊ RPS BATTLE";
+
+        content.innerHTML = `
+
+            <p>Choose your weapon, player!</p>
+
+            <button onclick="playRPS('Rock')">✊ ROCK</button>
+
+            <button onclick="playRPS('Paper')">✋ PAPER</button>
+
+            <button onclick="playRPS('Scissors')">✌ SCISSORS</button>
+
+            <h3 class="result" id="rpsResult">
+                READY FOR BATTLE?
+            </h3>
+
+        `;
+
+    }
+
+    else if (game === "reflex") {
+
+        title.innerText = "⚡ REFLEX RUSH";
+
+        content.innerHTML = `
+
+            <p>Wait for green, then click immediately!</p>
+
+            <div id="reactionBox"
+            onclick="reactionClick()">
+
+                PRESS START
+
+            </div>
+
+            <button onclick="startReaction()">
+                START TEST
+            </button>
+
+            <p class="result" id="reactionResult"></p>
+
+        `;
+
+    }
+
+    else if (game === "memory") {
+
+        title.innerText = "🧠 MEMORY MATCH";
+
+        matches = 0;
+
+        memoryMoves = 0;
+
+        firstCard = null;
+
+        lockBoard = false;
+
+        let symbols = [
+            "🚀", "🎮", "👾", "⭐",
+            "🚀", "🎮", "👾", "⭐"
+        ];
+
+        symbols.sort(() => Math.random() - 0.5);
+
+        content.innerHTML = `
+
+            <p>Find all four matching pairs!</p>
+
+            <p id="memoryMoves">Moves: 0</p>
+
+            <div class="memory-grid" id="memoryGrid"></div>
+
+        `;
+
+        let grid = document.getElementById("memoryGrid");
+
+        symbols.forEach(symbol => {
+
+            let card = document.createElement("button");
+
+            card.className = "memory-card";
+
+            card.innerText = "?";
+
+            card.dataset.symbol = symbol;
+
+            card.onclick = () => flipCard(card);
+
+            grid.appendChild(card);
+
+        });
+
+    }
+
+}
+
+/* ===== FINISH GAME ===== */
+
+function finishGame(won, score) {
+
+    if (gameFinished) return;
+
+    gameFinished = true;
+
+    data.played++;
+
+    if (won) {
+
+        data.wins++;
+
+    }
+
+    data.best = Math.max(data.best, score || 0);
+
+    saveData();
+
+}
+
+/* ===== NUMBER HUNT ===== */
+
+function checkGuess() {
+
+    if (gameFinished) return;
+
+    let input = document.getElementById("guessInput");
+
+    let guess = Number(input.value);
+
+    let result = document.getElementById("guessResult");
+
+    if (!input.value || guess < 1 || guess > 20) {
+
+        result.innerText = "Enter a number from 1 to 20!";
+
+        return;
+
+    }
+
+    attempts++;
+
+    if (guess === secretNumber) {
+
+        result.innerText = "🏆 VICTORY! YOU FOUND THE NUMBER!";
+
+        input.disabled = true;
+
+        finishGame(true, Math.max(10, 100 - attempts * 10));
+
+    }
+
+    else if (guess < secretNumber) {
+
+        result.innerText = "📈 TOO LOW! TRY HIGHER.";
+
+    }
+
+    else {
+
+        result.innerText = "📉 TOO HIGH! TRY LOWER.";
+
+    }
+
+    document.getElementById("attemptCount").innerText =
+        "Attempts: " + attempts;
+
+}
+
+/* ===== ROCK PAPER SCISSORS ===== */
+
+function playRPS(player) {
+
+    if (gameFinished) return;
+
+    let choices = ["Rock", "Paper", "Scissors"];
+
+    let computer = choices[
+        Math.floor(Math.random() * 3)
+    ];
+
+    let result;
+
+    if (player === computer) {
+
+        result = "DRAW! 🤝";
+
+    }
+
+    else if (
+
+        (player === "Rock" && computer === "Scissors") ||
+
+        (player === "Paper" && computer === "Rock") ||
+
+        (player === "Scissors" && computer === "Paper")
+
+    ) {
+
+        result = "YOU WIN! 🏆";
+
+        finishGame(true, 100);
+
+    }
+
+    else {
+
+        result = "COMPUTER WINS! 🤖";
+
+        finishGame(false, 0);
+
+    }
+
+    if (player === computer) {
+
+        finishGame(false, 0);
+
+    }
+
+    document.getElementById("rpsResult").innerText =
+
+        "YOU: " + player +
+
+        " | DOOM: " + computer +
+
+        " | " + result;
+
+}
+
+/* ===== REFLEX RUSH ===== */
+
+function startReaction() {
+
+    clearTimeout(reactionTimer);
+
+    let box = document.getElementById("reactionBox");
+
+    waiting = true;
+
+    ready = false;
+
+    box.className = "waiting";
+
+    box.innerText = "WAIT FOR GREEN...";
+
+    document.getElementById("reactionResult").innerText = "";
+
+    reactionTimer = setTimeout(() => {
+
+        ready = true;
+
+        waiting = false;
+
+        reactionStart = Date.now();
+
+        box.className = "ready";
+
+        box.innerText = "CLICK NOW!";
+
+    }, Math.random() * 3000 + 2000);
+
+}
+
+function reactionClick() {
+
+    let box = document.getElementById("reactionBox");
+
+    let result = document.getElementById("reactionResult");
+
+    if (waiting) {
+
+        clearTimeout(reactionTimer);
+
+        waiting = false;
+
+        box.className = "";
+
+        box.innerText = "TOO EARLY!";
+
+        result.innerText = "Wait for green next time!";
+
+    }
+
+    else if (ready) {
+
+        let time = Date.now() - reactionStart;
+
+        ready = false;
+
+        box.className = "";
+
+        box.innerText = "TEST COMPLETE";
+
+        result.innerText =
+
+            "⚡ YOUR REACTION TIME: " + time + " ms";
+
+        finishGame(true, Math.max(1, 1000 - time));
+
+    }
+
+}
+
+/* ===== MEMORY MATCH ===== */
+
+function flipCard(card) {
+
+    if (
+
+        lockBoard ||
+
+        card.classList.contains("matched") ||
+
+        card === firstCard ||
+
+        gameFinished
+
+    ) {
+
+        return;
+
+    }
+
+    card.innerText = card.dataset.symbol;
+
+    if (!firstCard) {
+
+        firstCard = card;
+
+        return;
+
+    }
+
+    memoryMoves++;
+
+    document.getElementById("memoryMoves").innerText =
+        "Moves: " + memoryMoves;
+
+    if (firstCard.dataset.symbol === card.dataset.symbol) {
+
+        firstCard.classList.add("matched");
+
+        card.classList.add("matched");
+
+        firstCard.disabled = true;
+
+        card.disabled = true;
+
+        firstCard = null;
+
+        matches++;
+
+        if (matches === 4) {
+
+            document.getElementById("memoryMoves").innerText =
+
+                "🏆 VICTORY! COMPLETED IN " + memoryMoves + " MOVES!";
+
+            finishGame(true, Math.max(10, 100 - memoryMoves * 5));
+
+        }
+
+    }
+
+    else {
+
+        lockBoard = true;
+
+        let previous = firstCard;
+
+        firstCard = null;
+
+        setTimeout(() => {
+
+            previous.innerText = "?";
+
+            card.innerText = "?";
+
+            lockBoard = false;
+
+        }, 800);
+
+    }
+
+}
+
+/* ===== CLOSE GAME ===== */
+
+function closeGame() {
+
+    clearTimeout(reactionTimer);
+
+    waiting = false;
+
+    ready = false;
+
+    document.getElementById("gameArea").style.display = "none";
+
+}
+
+/* ===== INITIALIZE WEBSITE ===== */
+
+updateStats();
+
+setTimeout(() => {
+
+    let loader = document.getElementById("loader");
+
+    loader.style.opacity = "0";
+
+    setTimeout(() => {
+
+        loader.remove();
+
+    }, 500);
+
+}, 1600);
+
+</script>
+
+</body>
+</html>
